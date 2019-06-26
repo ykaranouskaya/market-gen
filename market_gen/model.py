@@ -2,7 +2,6 @@
 Implement Transformer [	arXiv:1706.03762 ] decoder only model with self-attention
 that will learn the input time series data.
 """
-import numpy as np
 import tensorflow as tf
 
 from market_gen import utils
@@ -166,8 +165,7 @@ class Transformer(tf.keras.Model):
                                pos_period, rate)
         self.final_layer = tf.keras.layers.Dense(1)
 
-    def __call__(self, inp, training, look_ahead_mask,
-                 enc_padding_mask, dec_padding_mask):
+    def __call__(self, inp, training, look_ahead_mask):
         dec_output, attn_weights = self.decoder(inp,
                                                 training,
                                                 look_ahead_mask)
