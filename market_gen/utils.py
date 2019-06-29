@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 
 def create_look_ahead_mask(size):
@@ -73,6 +74,7 @@ def json_to_csv(json_data):
 
 
 # Fractional differentiation - fixed width window
+# Reference: Marcos Lopez de Prado 'Advances in Financial Machine Learning'
 def get_weights_ffd(d, thresh):
     k = 1
     w = [1.]
@@ -104,3 +106,19 @@ def frac_diff_ffd(series, d, thresh=1e-5):
     df = pd.concat(df, axis=1)
 
     return df
+
+
+def plot_data(data, time_data, save_path=None):
+    close = data[:, 1]
+    close_frac = data[:, -1]
+    df = pd.DataFrame(data={'close': close, 'close_frac_diff': close_frac},
+                      index=time_data)
+    fig = plt.figure(figsize=(16, 8))
+    ax = fig.add_subplot(1, 2, 1)
+    df.plot(y='close', ax=ax)
+
+    ax = fig.add_subplot(1, 2, 2)
+    df.plot(y='close_frac_diff', ax=ax)
+
+    if save_path:
+        plt.savefig(save_path)
